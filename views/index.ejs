@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <% include ./partials/head %>
-</head>
+  <head>
+    <% include ./partials/head %>
+  </head>
 
-<body class="container">
-  <header>
-    <% include ./partials/header %>
-  </header>
+  <body class="container">
+    <header>
+      <% include ./partials/header %>
+    </header>
   
-  <main>
-    <div class="jumbotron">
-      <h1><%= title%></h1>
-      <p>Welcome to Corr Visual</p>
-      
-    </div>
-  </main>
+    <main>
+      <div class="jumbotron">
+        <h1><%= title%></h1>
+        <p>Welcome to Corr Visual</p>
+        <iframe src="/graph"   marginwidth="0" marginheight="0" scrolling="no"></iframe>
+      </div>
+    </main>
   
-  <footer>
-    <% include ./partials/footer %>
-  </footer>
-</body>
+    <footer>
+      <% include ./partials/footer %>
+    </footer>
+  </body>
 </html>
