@@ -30,3 +30,18 @@ body.graph {
   margin-top: 0px;
   padding: 0px;
 }
+
+div.menu-bottom {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  padding-bottom: 10px;
+  pointer-events: none;
+}
+
+div.menu-left {
+  position: relative;
+  float: left;
+  padding: 4px 4px 0px 10px;
+  pointer-events: all;
+}

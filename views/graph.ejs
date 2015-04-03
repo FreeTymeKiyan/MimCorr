@@ -2,12 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    
   </head>
   
   <body class="graph">
     <script type="text/javascript" src="javascripts/graph.js"></script>
   </body>
+  
+  <div class="menu-bottom">
+    <div class="menu-left">
+      <div class="btn-group" data-toggle="tooltip" data-placement="top" data-original-title="Center molecules (Key: C)" data-delay={show:800, hide:50}>
+        <button data-bind="click: centerMolecules" class="btn btn-default"><span class="glyphicon glyphicon-screenshot"></span></button>
+      </div>
+    </div>
+  </div>
   
 </html>
