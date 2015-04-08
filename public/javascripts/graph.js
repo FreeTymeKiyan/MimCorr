@@ -1,7 +1,8 @@
 var width = 960,
     height = 500;
 
-var color = d3.scale.category20(); // 20 categorical colors
+var c1 = d3.rgb("lightgreen");
+var c2 = d3.rgb("lightskyblue");
 
 var force = d3.layout.force() // position linked nodes, physical simulation
     .charge(-120) // get or set the charge strength.
@@ -42,10 +43,13 @@ d3.json("../data/miserables.json", function(error, graph) { // add data
         })
       )
       // .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { 
+        if (d.group % 2 == 0) return c1.darker(d.group / 4); 
+        return c2.darker(d.group / 6); 
+      })
       .call(force.drag); // add drag
 
-  node.append("title")
+  node.append("title") // set title
       .text(function(d) { return d.name; });
 
   force.on("tick", function() {
