@@ -1,5 +1,26 @@
 var width = 960,
     height = 500;
+    
+var xScale = d3.scale.linear()
+    .domain([0, width]).range([0, width]);
+var yScale = d3.scale.linear()
+    .domain([0, height]).range([0, height]);
+    
+var zoomer = d3.behavior.zoom()
+    .scaleExtent([0.1,10])
+    .x(xScale)
+    .y(yScale)
+    .on("zoomstart", zoomstart)
+    .on("zoom", redraw);
+
+function zoomstart() {
+  
+}
+
+function redraw() {
+  vis.attr("transform",
+   "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+}
 
 var c1 = d3.rgb("lightgreen");
 var c2 = d3.rgb("lightskyblue");
@@ -12,6 +33,16 @@ var force = d3.layout.force() // position linked nodes, physical simulation
 var svg = d3.select("body").append("svg") // set svg
     .attr("width", width)
     .attr("height", height);
+    
+var svg_graph = svg.append('svg:g')
+    .call(zoomer);
+    
+var vis = svg_graph.append("svg:g");
+vis.attr('fill', 'red')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 1)
+    .attr('opacity', 0.5)
+    .attr('id', 'vis')
 
 d3.json("../data/miserables.json", function(error, graph) { // add data 
   force 
@@ -19,7 +50,7 @@ d3.json("../data/miserables.json", function(error, graph) { // add data
       .links(graph.links) // set the array of links between nodes
       .start();
 
-  var link = svg.selectAll(".link") // draw link
+  var link = vis.selectAll(".link") // draw link
       .data(graph.links)
     .enter().append("line")
       .attr("class", "link")
@@ -29,7 +60,7 @@ d3.json("../data/miserables.json", function(error, graph) { // add data
         else if (d.value % 3 == 1) return ("10, 10");
       });
 
-  var node = svg.selectAll(".node") // draw node
+  var node = vis.selectAll(".node") // draw node
       .data(graph.nodes)
     .enter().append("path") // set shape
       .attr("class", "node")
