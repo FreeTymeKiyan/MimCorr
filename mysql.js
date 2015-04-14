@@ -5,7 +5,7 @@ var connection = mysql.createConnection({
   host     : "localhost",
   user     : "yangliu",
   database : "genes", 
-  pwd      : "FreeTymeKiyan"
+  password : "FreeTymeKiyan"
 });
 
 connection.connect();
@@ -26,9 +26,11 @@ var queryCorr = function (input) {
   var values = [];
   values.push(input);
   connection.query(sql, values, function (err, rows, fields) {
-    rows;
+    console.log(rows);
   });
 }
+
+queryCorr(testInput);
 
 
 // _.forEach(testUsrInputs, function (val, key) {
