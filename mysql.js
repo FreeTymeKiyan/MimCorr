@@ -28,19 +28,27 @@ var queryCorr = function (input, cb) {
   // console.log(sql);
   var values = [];
   values.push(input);
-  connection.query(sql, values, function (err, rows, fields, cb) {
-    // cb(null, rows, temp);
-    cb(null, rows);
-    _.forEach(rows, function (val, key) {
-      queryCorr(val, null);
+  connection.query(sql, values, function (err, rows, fields) {
+    var diff = _.difference(rows, middle);
+    if (diff.length === 0) {
+	cb(null);
+	return;
+    }
+    middle = middle.concat(diff);
+    console.log("=============================");
+    console.log(middle.length);
+    _.forEach(diff, function (val, key) {
+      console.log(key);
+      queryCorr((temp ? val.mrna : val.mirna), callback);
     });
-    return;
   });
 }
 
-queryCorr(testInput, function (err, rows) {
-  
-});
+var callback = function (err) {
+    console.log("stop");   
+};
+
+queryCorr(testInput, callback);
 
 // function asyncLoop(iterations, func, callback) {
 //   var index = 0;
