@@ -1,5 +1,5 @@
-var _          = require('lodash');
-var mysql      = require("mysql");
+var _     = require('lodash');
+var mysql = require("mysql");
 
 var connection = mysql.createConnection({
   host     : "localhost",
@@ -18,7 +18,7 @@ var isMiRna = function (name) {
 };
 
 _.forEach(testUsrInput, function (val, key) {
-  var sql = "SELECT mrna, mirna, corr, db_num FROM correlation WHERE " + (isMiRna(val) ? "mirna = ?" : "mrna = ?") + " AND db_num != 0";
+  var sql = "SELECT mrna, mirna, corr, genes_db_num FROM correlation WHERE " + (isMiRna(val) ? "mirna = ?" : "mrna = ?") + " AND genes_db_num != 0 AND corr != 1000000 ORDER BY corr ASC";
   values = [];
   values.push(val);
   if (val === "hsa-miR-133a-2") {
