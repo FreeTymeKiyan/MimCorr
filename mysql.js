@@ -1,4 +1,4 @@
-var _     = require('lodash');
+var _     = require("lodash");
 var mysql = require("mysql");
 
 var connection = mysql.createConnection({
@@ -22,30 +22,59 @@ var isMiRna = function (name) {
 
 var queryCorr = function (input, cb) {
   var temp = isMiRna(input);
-  var sql = "SELECT mrna, mirna, corr, genes_db_num FROM correlation WHERE " 
-      + (temp ? "mirna = ?" : "mrna = ?") 
-      + " AND genes_db_num != 0 AND corr != 1000000 ORDER BY corr ASC";
+  var sql = getSql(temp);
   // console.log(sql);
   var values = [];
   values.push(input);
-  connection.query(sql, values, function (err, rows, fields) {
-    var diff = _.difference(rows, middle);
-    if (diff.length === 0) {
-	cb(null);
-	return;
-    }
-    middle = middle.concat(diff);
-    console.log("=============================");
-    console.log(middle.length);
-    _.forEach(diff, function (val, key) {
-      console.log(key);
-      queryCorr((temp ? val.mrna : val.mirna), callback);
+  // connection.query(sql, values, function (err, rows, fields) {
+  //   var diff = _.difference(rows, middle);
+  //   if (diff.length === 0) {
+  //     cb(null);
+  //     return;
+  //   }
+  //   middle = middle.concat(diff);
+  //   console.log("=============================");
+  //   console.log(middle.length);
+  //   _.forEach(diff, function (val, key) {
+  //     console.log(key);
+  //     queryCorr((temp ? val.mrna : val.mirna), callback);
+  //   });
+  // });
+  var query = connection.query(sql, values);
+  query
+    .on("error", function(err) {
+      // Handle error, an "end" event will be emitted after this as well
+    })
+    .on("fields", function(fields) {
+      // the field packets for the rows to follow
+    })
+    .on("result", function(row) {
+      // Pausing the connnection is useful if your processing involves I/O
+      connection.pause();
+
+      processRow(row, function() {
+        connection.resume();
+      });
+    })
+    .on("end", function() {
+      // all rows have been received
+      console.log("end");
     });
-  });
+}
+
+function processRow(row, callback) {
+  console.log(row);
+  callback();
+}
+
+function getSql(isMiRna) {
+  return "SELECT mrna, mirna, corr, genes_db_num FROM correlation WHERE " 
+    + (isMiRna ? "mirna = ?" : "mrna = ?") 
+    + " AND genes_db_num != 0 AND corr != 1000000 ORDER BY corr ASC";
 }
 
 var callback = function (err) {
-    console.log("stop");   
+  console.log("stop");   
 };
 
 queryCorr(testInput, callback);
