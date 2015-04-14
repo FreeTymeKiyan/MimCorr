@@ -1,4 +1,6 @@
+var _          = require('lodash');
 var mysql      = require("mysql");
+
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
@@ -7,14 +9,25 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query("SELECT * FROM correlation WHERE mirna = 'hsa-miR-1304'", function(err, rows, fields) {
-  if (err) throw err;
-  console.log(rows);
-});
+var testUsrInput = ["EIF4B", "hsa-miR-1304", "HEATR1", "OR5M8", "hsa-miR-659", "hsa-miR-133a-2"];
+var values = [];
+var nodes = [];
 
-connection.query("SELECT DISTINCT mirna FROM correlation", function(err, rows, fields) {
-  if (err) throw err;
-  console.log(rows);
-});
+var isMiRna = function (name) {
+  return name.indexOf("hsa") === 0;
+};
+
+_.forEach(testUsrInput, function (val, key) {
+  var sql = "SELECT mrna, mirna, corr, db_num FROM correlation WHERE " + (isMiRna(val) ? "mirna = ?" : "mrna = ?") + " AND db_num != 0";
+  values = [];
+  values.push(val);
+  if (val === "hsa-miR-133a-2") {
+    console.log(sql);
+    console.log(values);
+  }
+  connection.query(sql, values, function (err, rows, fields) {
+    console.log(rows);
+  });
+})
 
 connection.end();
