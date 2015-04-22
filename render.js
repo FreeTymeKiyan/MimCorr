@@ -28,15 +28,20 @@ async.parallel([
   },
   function (callback) {
     read(callback, TYPE_MIRNA)
+  },
+  function (callback) {
+    fs.readFile("/Users/yongshengbai/Downloads/Data/MimCor/refined_30000.csv", "utf8", function (err, d) {
+      if (err) throw err;
+      var res = d3.csv.parse(d);
+      // console.log(res[0]);
+      callback(null, res);
+    });
   }
 ], function (err, res) {
   if (err) throw err;
   res.nodes = _.union(res[0], res[1]);
-  console.log(res.nodes[0]);
+  res.links = res[2];
+  // console.log(res.nodes[0]);
+  // console.log(res.links[0]);
+  // nodes got!
 });
-
-// fs.readFile("/Users/yongshengbai/Downloads/Data/MimCor/refined.csv", "utf8", function (err, d) {
-//   if (err) throw err;
-//   var arr = d3.csv.parse(d);
-//   console.log(arr.length);
-// })
