@@ -1,3 +1,30 @@
+CREATE DATABASE genes;
+
+CREATE TABLE corr
+(
+  mrna varchar(30) NOT NULL,
+  mirna varchar(30) NOT NULL,
+  corr DOUBLE NOT NULL,
+  target_profiler BOOLEAN,
+  target_scan BOOLEAN,
+  target_miranda BOOLEAN,
+  db_num INTEGER NOT NULL
+);
+
+LOAD DATA LOCAL INFILE '~/Downloads/Data/original.txt' INTO TABLE corr
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+IGNORE 1 lines;
+
+UPDATE corr SET db_num = target_profiler + target_scan + target_miranda; 
+
+SELECT mrna, mirna, corr, db_num FROM corr 
+WHERE corr != 1000000 AND db_num != 0
+INTO OUTFILE '/usr/local/dbOutput/refined.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
 CREATE TABLE mrna_expr 
 (
   gene varchar(30) NOT NULL, 
@@ -16,10 +43,16 @@ CREATE TABLE mrna_expr
   average DOUBLE
 );
 
-LOAD DATA LOCAL INFILE '/home/yangliu/Documents/DataVisualization/Expression/mrna.csv' INTO TABLE mrna_expr
+LOAD DATA LOCAL INFILE '~/Downloads/Data/expression/mrna.csv' INTO TABLE mrna_expr
 FIELDS TERMINATED BY ',' 
-LINES TERMINATED BY '\r\n' 
+LINES TERMINATED BY '\n' 
 IGNORE 1 LINES;
+
+SELECT gene, average FROM mrna_expr
+INTO OUTFILE '/usr/local/dbOutput/mrna.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
 
 CREATE TABLE mirna_expr 
 (
@@ -39,7 +72,13 @@ CREATE TABLE mirna_expr
   average DOUBLE
 );
 
-LOAD DATA LOCAL INFILE '/home/yangliu/Documents/DataVisualization/Expression/mirna.csv' INTO TABLE mirna_expr
+LOAD DATA LOCAL INFILE '~/Downloads/Data/expression/mirna.csv' INTO TABLE mirna_expr
 FIELDS TERMINATED BY ',' 
-LINES TERMINATED BY '\r\n' 
+LINES TERMINATED BY '\n' 
 IGNORE 1 LINES;
+
+SELECT id, average FROM mirna_expr
+INTO OUTFILE '/usr/local/dbOutput/mirna.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
