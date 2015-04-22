@@ -25,6 +25,14 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
 
+SELECT mrna, mirna, corr, db_num FROM corr 
+WHERE corr != 1000000 AND db_num != 0
+LIMIT 30000
+INTO OUTFILE '/usr/local/dbOutput/refined.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
 CREATE TABLE mrna_expr 
 (
   gene varchar(30) NOT NULL, 
