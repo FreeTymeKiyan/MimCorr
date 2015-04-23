@@ -44,45 +44,52 @@ vis.attr('fill', 'red')
     .attr('opacity', 0.5)
     .attr('id', 'vis')
 
-d3.json("../data/miserables.json", function(error, graph) { // add data 
-  force 
-      .nodes(graph.nodes) // set the array of nodes to layout
-      .links(graph.links) // set the array of links between nodes
-      .start();
+d3.json("../data/graph_5000.json", function(error, graph) { // add data 
+  
+  var nodesByName = {};
 
+  graph.links.forEach(function (link) {
+    link.source = nodeByName(link.source);
+    link.target = nodeByName(link.target);
+  });
+  
   var link = vis.selectAll(".link") // draw link
       .data(graph.links)
     .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+      .style("stroke-width", function(d) { return 5;  }) // 100 * Math.abs(d.corr)
       .style("stroke-dasharray", function (d) { // set dashed-line
-        if (d.value % 3 == 0) return ("2, 2");
-        else if (d.value % 3 == 1) return ("10, 10");
+        if (d.type % 3 == 0) return ("2, 2");
+        else if (d.type % 3 == 1) return ("10, 10");
       });
 
   var node = vis.selectAll(".node") // draw node
-      .data(graph.nodes)
+      .data(d3.values(nodesByName))
     .enter().append("path") // set shape
       .attr("class", "node")
       .attr("d", d3.svg.symbol()
         .type(function(d) { // set shape type
-          if (d.group % 2) return d3.svg.symbolTypes[0];
-          return d3.svg.symbolTypes[3]; 
+          if (d.type % 2) return d3.svg.symbolTypes[0];
+          return d3.svg.symbolTypes[3];
         })
         .size(function(d) { // set shape size
-          return (d.group + 5) * (d.group + 5)
+          return 500; // d.expr / 1000
         })
       )
-      // .attr("r", 5)
-      .style("fill", function(d) { 
-        if (d.group % 2 == 0) return c1.darker(d.group / 4); 
-        return c2.darker(d.group / 6); 
+      .style("fill", function(d) { // d.expr
+        if (d.type % 2 == 0) return c1;
+        return c2;
       })
       .call(force.drag); // add drag
 
   node.append("title") // set title
-      .text(function(d) { return d.name; });
-
+      .text(function(d) { return d.id || d.gene; });
+      
+  force
+      .nodes(d3.values(nodesByName)) // set the array of nodes to layout
+      .links(graph.links) // set the array of links between nodes
+      .start();
+  
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
@@ -91,9 +98,22 @@ d3.json("../data/miserables.json", function(error, graph) { // add data
 
     node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
-        
+
     node.attr("transform", function(d) { // transform shape paths
         return "translate(" + d.x + "," + d.y + ")";
     });
   });
+  
+  function nodeByName(name) {
+    if (nodesByName[name]) return nodesByName[name];
+    // search in graph.nodes array
+    var node = _.find(graph.nodes, function(chr) {
+      name = name.toLowerCase();
+      if (chr.id) return _.startsWith(chr.id.toLowerCase(), name);
+      return _.startsWith(chr.gene.toLowerCase(), name);
+    });
+    if (!node) console.log(name);
+    nodesByName[name] = node;
+    return nodesByName[name];
+  }
 });
