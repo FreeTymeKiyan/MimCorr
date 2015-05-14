@@ -1,5 +1,7 @@
-var width = 960,
-    height = 500;
+// var width = 960,
+//     height = 500;
+var width = 1280,
+    height = 680;
     
 var xScale = d3.scale.linear()
     .domain([0, width]).range([0, width]);
@@ -24,10 +26,15 @@ function redraw() {
 
 var c1 = d3.rgb("lightgreen");
 var c2 = d3.rgb("lightskyblue");
+var red = d3.rgb("red");
+var grey = d3.rgb("grey");
 
 var force = d3.layout.force() // position linked nodes, physical simulation
-    .charge(-120) // get or set the charge strength.
-    .linkDistance(100) // set the link distance
+    .charge(-120) // negative push, positive pull
+    .linkDistance(function (d) {
+      if (d.corr >= 0) return 10;
+      return 100;
+    }) // set the link distance
     .size([width, height]);
 
 var svg = d3.select("body").append("svg") // set svg
@@ -44,7 +51,7 @@ vis.attr('fill', 'red')
     .attr('opacity', 0.5)
     .attr('id', 'vis')
 
-d3.json("../data/graph_5000.json", function(error, graph) { // add data 
+d3.json("../data/graph_100.json", function(error, graph) { // add data 
   
   var nodesByName = {};
 
@@ -57,6 +64,9 @@ d3.json("../data/graph_5000.json", function(error, graph) { // add data
       .data(graph.links)
     .enter().append("line")
       .attr("class", "link")
+      .style("stroke", function(d) {
+        return (d.corr >= 0 ? red : grey);
+      })
       .style("stroke-width", function(d) { return 5;  }) // 100 * Math.abs(d.corr)
       .style("stroke-dasharray", function (d) { // set dashed-line
         if (d.type % 3 == 0) return ("2, 2");
