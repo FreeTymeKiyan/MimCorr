@@ -120,7 +120,9 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
         
         if (dbNum % 3 == 0) return ("2, 2");
         else if (dbNum % 3 == 1) return ("10, 10");
-      });
+      })
+      .on("mouseover", function(d) { highlightLink(this, true, d); })
+      .on("mouseout",  function(d) { highlightLink(this, false, d); });
       
   tumorLinks.append("title").text(function(d) { return d.T_CC; });
   
