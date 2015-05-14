@@ -17,6 +17,30 @@ a {
   stroke-opacity: .6;
 }
 
+path.node.main {
+  fill: #3C3C3C !important;
+}
+
+path.node.fixed {
+  stroke: black !important;
+}
+
+path.node.others {
+  fill-opacity: .1 !important;
+}
+
+line.others{
+  stroke-opacity: .1 !important;
+}
+
+.normalLink.main {
+  stroke: #3C3C3C !important;
+}
+
+.tumorLink.main {
+  stroke: #3C3C3C !important;
+}
+
 iframe {
   width: 960px;
   height: 500px;
