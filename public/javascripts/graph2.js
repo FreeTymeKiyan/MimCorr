@@ -218,20 +218,11 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
   }
 
   function dragged(d) {
-    // node.filter(function(d) { return d.fixed; })
-    //     .each(function(d) {
-    //         d.x += d3.event.dx;
-    //         d.y += d3.event.dy;
-    //
-    //         d.px += d3.event.dx;
-    //         d.py += d3.event.dy;
-    //     })
     force.resume();
   }
 
   function dragended(d) {
-    // node.filter(function(d) { return d.current; })
-    //     .each(function(d) { d.fixed &= ~6; })
+    // TODO
   }
 
   function dblclick(d) {
@@ -240,7 +231,40 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
   
   function highlight(node, isActive, data) {
     console.log(data);
+    // fade all nodes and links
+    d3.selectAll("line").classed("others", isActive);
+    d3.selectAll("path").classed("others", isActive);
+    // highlight center node
+    d3.select(node).classed("others", !isActive);
     d3.select(node).classed("main", isActive);
+    // highlight links
+    if (data.type === TYPE_MRNA) { // mrna, source
+      var connLinks = normalLinks.filter(function (d, i) {
+        return d.mRNA === data.name;
+      });
+      connLinks.classed("others", !isActive);
+      
+      tumorLinks.filter(function (d, i) {
+        return d.mRNA === data.name;
+      }).classed("others", !isActive);
+      
+      connLinks.each(function (d) {
+        d3.select("#" + d.microRNA).classed("others", !isActive);
+      });
+    } else { // microrna, target
+      var connLinks = normalLinks.filter(function (d, i) {
+        return d.microRNA === data.name;
+      });
+      connLinks.classed("others", !isActive);
+      
+      tumorLinks.filter(function (d, i) {
+        return d.microRNA === data.name;
+      }).classed("others", !isActive);
+      
+      connLinks.each(function (d) {
+        d3.select("#" + d.mRNA).classed("others", !isActive);
+      });
+    }
     // TODO find collected links and nodes
     // name & type -> link -> the other nodes 
     // node.filter(function (d) {
