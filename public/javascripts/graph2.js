@@ -235,45 +235,38 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
     d3.selectAll("line").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
     // highlight center node
-    d3.select(node).classed("others", !isActive);
     d3.select(node).classed("main", isActive);
-    // highlight links
-    if (data.type === TYPE_MRNA) { // mrna, source
-      var connLinks = normalLinks.filter(function (d, i) {
-        return d.mRNA === data.name;
-      });
-      connLinks.classed("others", !isActive);
+    if (isActive) {
+      d3.select(node).classed("others", !isActive);
+      // highlight links
+      if (data.type === TYPE_MRNA) { // mrna, source
+        var connLinks = normalLinks.filter(function (d, i) {
+          return d.mRNA === data.name;
+        });
+        connLinks.classed("others", !isActive);
       
-      tumorLinks.filter(function (d, i) {
-        return d.mRNA === data.name;
-      }).classed("others", !isActive);
+        tumorLinks.filter(function (d, i) {
+          return d.mRNA === data.name;
+        }).classed("others", !isActive);
       
-      connLinks.each(function (d) {
-        d3.select("#" + d.microRNA).classed("others", !isActive);
-      });
-    } else { // microrna, target
-      var connLinks = normalLinks.filter(function (d, i) {
-        return d.microRNA === data.name;
-      });
-      connLinks.classed("others", !isActive);
+        connLinks.each(function (d) {
+          d3.select("#" + d.microRNA).classed("others", !isActive);
+        });
+      } else { // microrna, target
+        var connLinks = normalLinks.filter(function (d, i) {
+          return d.microRNA === data.name;
+        });
+        connLinks.classed("others", !isActive);
       
-      tumorLinks.filter(function (d, i) {
-        return d.microRNA === data.name;
-      }).classed("others", !isActive);
+        tumorLinks.filter(function (d, i) {
+          return d.microRNA === data.name;
+        }).classed("others", !isActive);
       
-      connLinks.each(function (d) {
-        d3.select("#" + d.mRNA).classed("others", !isActive);
-      });
+        connLinks.each(function (d) {
+          d3.select("#" + d.mRNA).classed("others", !isActive);
+        });
+      }
     }
-    // TODO find collected links and nodes
-    // name & type -> link -> the other nodes 
-    // node.filter(function (d) {
-    //   console.log(d);
-    //   return;
-    // })
-    // .each(function (d) {
-    //
-    // });
   }
   
   function highlightLink(link, isActive, data) {
