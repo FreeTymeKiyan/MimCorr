@@ -64,7 +64,7 @@ vis.attr('fill', 'red')
 
 var nodeGraph;
 
-d3.tsv("../data/data.txt", function(error, graph) { // add data
+d3.csv("../data/data.csv", function(error, graph) { // add data
   var nodesByName = {};
   
   graph.forEach(function (link) {
