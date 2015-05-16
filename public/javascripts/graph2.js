@@ -59,7 +59,7 @@ var vis = svg_graph.append("svg:g");
 vis.attr('fill', 'red')
     .attr('stroke', 'black')
     .attr('stroke-width', 1)
-    .attr('opacity', 0.5)
+    .attr('opacity', 0.6)
     .attr('id', 'vis')
 
 var nodeGraph;
@@ -91,8 +91,8 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
         if (d.Targetscan === "targetscan-Yes") dbNum += 1;
         if (d.MiRanda === "miRanda-Yes") dbNum += 1;
       
-        if (dbNum % 3 == 0) return ("2, 2");
-        else if (dbNum % 3 == 1) return ("10, 10");
+        if (dbNum % 3 === 1) return ("2, 2"); // 1 database
+        else if (dbNum % 3 === 2) return ("8, 2"); // 2 databases
       })
       .on("mouseover", function(d) { highlightLink(this, true, d); })
       .on("mouseout",  function(d) { highlightLink(this, false, d); });
@@ -118,8 +118,8 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
         if (d.Targetscan === "targetscan-Yes") dbNum += 1;
         if (d.MiRanda === "miRanda-Yes") dbNum += 1;
         
-        if (dbNum % 3 == 0) return ("2, 2");
-        else if (dbNum % 3 == 1) return ("10, 10");
+        if (dbNum % 3 === 1) return ("2, 2");
+        else if (dbNum % 3 === 2) return ("8, 2");
       })
       .on("mouseover", function(d) { highlightLink(this, true, d); })
       .on("mouseout",  function(d) { highlightLink(this, false, d); });
@@ -154,8 +154,9 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
         if (d.type % 2 == 0) return c1;
         return c2;
       })
+      .attr("data-legend", function(d) { return d.name})
       .on("mouseover", function(d) { highlight(this, true, d); })
-      .on("mouseout",  function(d) { highlight(this, false, d); })
+      .on("mouseout", function(d) { highlight(this, false, d); })
       .on("dblclick", dblclick)
       .call(force.drag()
         .on("dragstart", dragstart)
@@ -232,7 +233,8 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
   function highlight(node, isActive, data) {
     console.log(data);
     // fade all nodes and links
-    d3.selectAll("line").classed("others", isActive);
+    d3.selectAll("line.normalLink").classed("others", isActive);
+    d3.selectAll("line.tumorLink").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
     // highlight center node
     d3.select(node).classed("main", isActive);
@@ -270,7 +272,8 @@ d3.tsv("../data/data.txt", function(error, graph) { // add data
   }
   
   function highlightLink(link, isActive, data) {
-    d3.selectAll("line").classed("others", isActive);
+    d3.selectAll("line.normalLink").classed("others", isActive);
+    d3.selectAll("line.tumorLink").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
     if (isActive) {
       d3.select(link).classed("others", !isActive);
