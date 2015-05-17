@@ -63,6 +63,8 @@ vis.attr('fill', 'red')
     .attr('id', 'vis')
 
 var nodeGraph;
+var highlight;
+var highlightLinkType;
 
 d3.csv("../data/data.csv", function(error, graph) { // add data
   var nodesByName = {};
@@ -90,7 +92,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         if (d.Targetprofiler === "targetprofiler-Yes") dbNum += 1;
         if (d.Targetscan === "targetscan-Yes") dbNum += 1;
         if (d.MiRanda === "miRanda-Yes") dbNum += 1;
-      
+        d.type = dbNum;
         if (dbNum % 3 === 1) return ("2, 2"); // 1 database
         else if (dbNum % 3 === 2) return ("8, 2"); // 2 databases
       })
@@ -117,7 +119,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         if (d.Targetprofiler === "targetprofiler-Yes") dbNum += 1;
         if (d.Targetscan === "targetscan-Yes") dbNum += 1;
         if (d.MiRanda === "miRanda-Yes") dbNum += 1;
-        
+        d.type = dbNum;        
         if (dbNum % 3 === 1) return ("2, 2");
         else if (dbNum % 3 === 2) return ("8, 2");
       })
@@ -155,8 +157,8 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         return c2;
       })
       .attr("data-legend", function(d) { return d.name})
-      .on("mouseover", function(d) { highlight(this, true, d); })
-      .on("mouseout", function(d) { highlight(this, false, d); })
+      .on("mouseover", function(d) { highlight(d, true); })
+      .on("mouseout", function(d) { highlight(d, false); })
       .on("dblclick", dblclick)
       .call(force.drag()
         .on("dragstart", dragstart)
@@ -230,16 +232,16 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     d3.select(this).classed("fixed", d.fixed = false);
   }
   
-  function highlight(node, isActive, data) {
+  highlight = function (data, isActive) {
     console.log(data);
     // fade all nodes and links
     d3.selectAll("line.normalLink").classed("others", isActive);
     d3.selectAll("line.tumorLink").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
     // highlight center node
-    d3.select(node).classed("main", isActive);
+    d3.select("#" + data.name).classed("main", isActive);
     if (isActive) {
-      d3.select(node).classed("others", !isActive);
+      d3.select("#" + data.name).classed("others", !isActive);
       // highlight links
       if (data.type === TYPE_MRNA) { // mrna, source
         var connLinks = normalLinks.filter(function (d, i) {
@@ -281,7 +283,67 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
       d3.select("#" + data.microRNA).classed("others", !isActive);
     }
   }
+  
+  highlightLinkType = function (id) {
+    resetGraph();
+    fadeGraph();
+    id = +id;
+    normalLinks.filter(function (d, i) {
+      console.log(d);
+      return d.type === id;
+    }).each(function (d) {
+      d3.select("#" + d.mRNA).classed("others", false);
+      d3.select("#" + d.microRNA).classed("others", false);
+    })
+    .classed("others", false);
+    tumorLinks.filter(function (d, i) {
+      return d.type === id;
+    }).classed("others", false);
+  }
 });
+
+function highlightBySearch() {
+  resetGraph();
+  var name = $("#name").val(); // get node name
+  // return if no name entered
+  if (name === "") {
+    console.log("no name entered");
+    return;
+  }
+  // TODO get neighboring links and nodes
+  var curNode = force.nodes().filter(function (d) {
+    return d.name === name;
+  });
+  // node not found in graph
+  if (curNode.length === 0) {
+    console.log("node not found");
+    return;
+  }
+  centerOnNode(curNode[0]);
+}
+
+function resetGraph() {
+  d3.selectAll("line.normalLink").classed("others", false);
+  d3.selectAll("line.tumorLink").classed("others", false);
+  d3.selectAll("path").classed("others", false);
+  d3.selectAll("path").classed("main", false);
+}
+
+function fadeGraph() {
+  d3.selectAll("line.normalLink").classed("others", true);
+  d3.selectAll("line.tumorLink").classed("others", true);
+  d3.selectAll("path").classed("others", true);
+}
+
+function centerOnNode(d) {
+  // move and scale
+  var cx = (window.innerWidth / 2 - d.x * zoomer.scale());
+	var cy = (window.innerHeight / 2 - d.y * zoomer.scale());
+  zoomer.translate([cx, cy]);
+  vis.attr("transform", "translate(" + cx + "," + cy  + ") scale(" + zoomer.scale() + ")");
+  // TODO scale the graph as well
+  highlight(d, true);
+}
 
 function centerView() {
   if (nodeGraph === null) {
