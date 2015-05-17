@@ -287,9 +287,8 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
   highlightLinkType = function (id) {
     resetGraph();
     fadeGraph();
-    id = +id;
+
     normalLinks.filter(function (d, i) {
-      console.log(d);
       return d.type === id;
     }).each(function (d) {
       d3.select("#" + d.mRNA).classed("others", false);
@@ -299,7 +298,16 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     tumorLinks.filter(function (d, i) {
       return d.type === id;
     }).classed("others", false);
-  }
+  };
+  
+  highlightNodeType = function (type) {
+    resetGraph();
+    fadeGraph();
+    
+    node.filter(function (d, i) {
+      return d.type === type;
+    }).classed("others", false);
+  };
 });
 
 function highlightBySearch() {

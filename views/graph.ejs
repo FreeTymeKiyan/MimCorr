@@ -73,9 +73,9 @@
             Link<span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li onclick="highlightLinkType(this.id)" id="1"><a href="#">1</a></li>
-            <li onclick="highlightLinkType(this.id)" id="2"><a href="#">2</a></li>
-            <li onclick="highlightLinkType(this.id)" id="3"><a href="#">3</a></li>
+            <li onclick="highlightLinkType(this.value)" value="1"><a href="#">1</a></li>
+            <li onclick="highlightLinkType(this.value)" value="2"><a href="#">2</a></li>
+            <li onclick="highlightLinkType(this.value)" value="3"><a href="#">3</a></li>
           </ul>
         </div>
         <!-- dropdown filter node type -->
@@ -84,8 +84,8 @@
             Node<span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">mRNA</a></li>
-            <li><a href="#">microRNA</a></li>
+            <li onclick="highlightNodeType(this.value)" value="0"><a href="#">mRNA</a></li>
+            <li onclick="highlightNodeType(this.value)" value="1"><a href="#">microRNA</a></li>
           </ul>
         </div>
         <!-- search bar -->
