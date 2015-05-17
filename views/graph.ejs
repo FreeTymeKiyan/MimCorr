@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="javascripts/lodash.min.js"></script>
+    <script src="javascripts/jquery-1.11.2.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
   </head>
   
   <div class="legend">
@@ -59,14 +61,41 @@
     <script type="text/javascript" src="javascripts/graph2.js"></script>
   </body>
   
-  <div class="menu-bottom">
-    <div class="menu-left">
-      <div class="btn-group" data-toggle="tooltip" data-placement="top" data-original-title="Center molecules (Key: C)" data-delay={show:800, hide:50}>
-        <button data-bind="click: centerMolecules" class="btn btn-default" onclick="centerView()"><span class="glyphicon glyphicon-screenshot"></span></button>
+  <div class="navbar-fixed-bottom">
+    <div class="container col-sm-6 col-sm-offset-3">
+      <div class="btn-group" role="group" data-toggle="tooltip" data-placement="top" data-original-title="Center molecules (Key: C)" data-delay="{show:800, hide:50}">
+        <button data-bind="click: centerMolecules" class="btn btn-default" onclick="centerView()">
+          <span class="glyphicon glyphicon-screenshot"></span>
+        </button>
+        <!-- dropdown filter link type -->
+        <div class="btn-group dropup" role="group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Link<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+          </ul>
+        </div>
+        <!-- dropdown filter node type -->
+        <div class="btn-group dropup" role="group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Node<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">mRNA</a></li>
+            <li><a href="#">microRNA</a></li>
+          </ul>
+        </div>
+        <!-- search bar -->
+        <div class="input-group" id="search-bar">
+          <input type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search</button>
+          </span>
+        </div>
       </div>
-      <!-- a text field -->
-      <!-- filter on certain nodes and its collection -->
-      <!-- filter on other properties -->
     </div>
   </div>
   
