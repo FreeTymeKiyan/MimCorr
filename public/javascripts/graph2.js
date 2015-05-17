@@ -318,7 +318,7 @@ function highlightBySearch() {
     console.log("no name entered");
     return;
   }
-  // TODO get neighboring links and nodes
+  // get node
   var curNode = force.nodes().filter(function (d) {
     return d.name === name;
   });

@@ -56,10 +56,7 @@ body.graph {
 }
 
 div.menu-bottom {
-  position: absolute;
-  bottom: 0px;
   padding-bottom: 10px;
-  pointer-events: none;
 }
 
 div.menu-left {
