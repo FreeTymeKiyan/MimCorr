@@ -73,9 +73,9 @@
             Link<span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
+            <li onclick="highlightLinkType(this.id)" id="1"><a href="#">1</a></li>
+            <li onclick="highlightLinkType(this.id)" id="2"><a href="#">2</a></li>
+            <li onclick="highlightLinkType(this.id)" id="3"><a href="#">3</a></li>
           </ul>
         </div>
         <!-- dropdown filter node type -->
@@ -90,9 +90,9 @@
         </div>
         <!-- search bar -->
         <div class="input-group" id="search-bar">
-          <input type="text" class="form-control" placeholder="Search for...">
+          <input id="name" type="text" class="form-control" placeholder="Search for...">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Search</button>
+            <button class="btn btn-default" type="button" onclick="highlightBySearch()">Search</button>
           </span>
         </div>
       </div>
