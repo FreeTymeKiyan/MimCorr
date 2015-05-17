@@ -4,8 +4,8 @@ const KEYCODE_C = 67;
 
 // var width = 960,
 //     height = 500;
-var width = 1280,
-    height = 680;
+var width = window.innerWidth,
+    height = window.innerHeight;
     
 var xScale = d3.scale.linear()
     .domain([0, width]).range([0, width]);
@@ -345,11 +345,11 @@ function fadeGraph() {
 
 function centerOnNode(d) {
   // move and scale
+  zoomer.scale(1);
   var cx = (window.innerWidth / 2 - d.x * zoomer.scale());
 	var cy = (window.innerHeight / 2 - d.y * zoomer.scale());
-  zoomer.translate([cx, cy]);
   vis.attr("transform", "translate(" + cx + "," + cy  + ") scale(" + zoomer.scale() + ")");
-  // TODO scale the graph as well
+  zoomer.translate([cx, cy]);
   highlight(d, true);
 }
 
@@ -368,8 +368,8 @@ function centerView() {
   molWidth = maxX - minX;
   molHeight = maxY - minY;
   
-  widthRatio = width / molWidth;
-  heightRatio = height / molHeight;
+  widthRatio = window.innerWidth / molWidth;
+  heightRatio = window.innerHeight / molHeight;
   
   minRatio = Math.min(widthRatio, heightRatio) * 0.9;
   
