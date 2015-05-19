@@ -129,8 +129,6 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
   tumorLinks.append("title").text(function(d) { return d.T_CC; });
   
   var tumorSymbol = tumor.enter().append("text")
-      // .style("stroke", "grey")
-      // .style("fill", "none")
       .attr("class", "tumorSymbol")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle") 
