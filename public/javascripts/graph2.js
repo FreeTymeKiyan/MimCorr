@@ -24,14 +24,6 @@ var tumorGene;
 var normalMirna;
 var tumorMirna;
 
-d3.tsv("../data/gene.tumor.txt", function(error, graph) {
-  tumorGene = graph;
-});
-
-d3.tsv("../data/miRNA.tumor.txt", function(error, graph) {
-  tumorMirna = graph;
-});
-
 function zoomstart() {
   
 }
@@ -56,9 +48,9 @@ var force = d3.layout.force() // position linked nodes, physical simulation
     .friction(0.8)
     .theta(0.7)
     .linkStrength(0.1)
-    .linkDistance(50) // set the link distance
-    .charge(-100) // negative push, positive pull
-    .chargeDistance(height - 450)
+    .linkDistance(30) // set the link distance
+    .charge(-40) // negative push, positive pull
+    .chargeDistance(height - 200)
     .size([width, height]);
 
 var svg = d3.select("body")
@@ -169,7 +161,6 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         if (d.type % 2 == 0) return c1;
         return c2;
       })
-      .attr("data-legend", function(d) { return d.name})
       .on("mouseover", function(d) { highlight(d, true); })
       .on("mouseout", function(d) { highlight(d, false); })
       .on("dblclick", dblclick)
@@ -180,7 +171,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         
   d3.tsv("../data/gene.normal.txt", function(error, graph) {
     normalGene = graph;
-    var exprScale = buildScale(normalGene);
+    var exprScale = buildScale(normalGene, TYPE_MRNA);
     node.filter(function (d) {
       return d.type % 2 === TYPE_MRNA;
     }).attr("d", d3.svg.symbol()
@@ -189,17 +180,19 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
         })
         .size(function(d) { // set shape size
           // normalGene, average
-          var avg = _.result(_.find(normalGene, function (g) {
+          d.expr = _.result(_.find(normalGene, function (g) {
             return g.gene === d.name;
           }), 'average');
-          return exprScale(avg); 
+          return exprScale(d.expr); 
         })
-    );
+    ).append("title").text(function (d) {
+      return d.name + " | " + d.expr;
+    });
   });
   
   d3.tsv("../data/miRNA.normal.txt", function(error, graph) {
     normalMirna = graph;
-    var exprScale = buildScale(normalMirna);
+    var exprScale = buildScale(normalMirna, TYPE_MIRNA);
     node.filter(function (d) {
       return d.type % 2 === TYPE_MIRNA;
     }).attr("d", d3.svg.symbol()
@@ -207,16 +200,23 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
           return d3.svg.symbolTypes[0];
         })
         .size(function(d) { // set shape size
-          var avg = _.result(_.find(normalMirna, function (g) {
+          d.expr = _.result(_.find(normalMirna, function (g) {
             return g.mirna === d.name;
           }), 'average');
-          return exprScale(avg); 
+          return exprScale(d.expr); 
         })
-    );
+    ).append("title").text(function (d) {
+      return d.name + " | " + d.expr;
+    });
+  });
+  
+  d3.tsv("../data/gene.tumor.txt", function(error, graph) {
+    tumorGene = graph;
   });
 
-  node.append("title") // set title
-      .text(function(d) { return d.name; });
+  d3.tsv("../data/miRNA.tumor.txt", function(error, graph) {
+    tumorMirna = graph;
+  });
 
   force
       .nodes(nodeGraph) // set the array of nodes to layout
@@ -260,7 +260,6 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     var node = {};
     node.name = name;
     node.type = type;
-    node.expr = 1000;
     nodesByName[name] = node;
     return nodesByName[name];
   }
@@ -435,11 +434,23 @@ function centerView() {
   zoomer.scale(minRatio);
 }
 
-function buildScale(expr) {
-  var max = _.max(expr, "average").average;
-  var min = _.min(expr, "average").average;
-  return d3.scale.linear()
+function buildScale(expr, type) {
+  var max = _.max(expr, function (g) {
+    g.average = +g.average;
+    return g.average;
+  }).average;
+  var min = _.min(expr, function (g) {
+    g.average = +g.average;
+    return g.average;
+  }).average;
+  
+  return type === TYPE_MIRNA ? d3.scale.log()
       .clamp(true)
       .domain([min, max])
-      .range([100, 250]);
+      .range([75, 375]) 
+    : d3.scale.pow()
+      .clamp(true)
+      .exponent(0.5)
+      .domain([min, max])
+      .range([75, 375]);
 }
