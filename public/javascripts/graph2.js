@@ -72,6 +72,11 @@ vis.attr('fill', 'red')
 var nodeGraph;
 var highlight;
 var highlightLinkType;
+var corrFilter;
+var weightFilter;
+var exprFilter;
+var linkTypeFilter;
+var posCorrFilter;
 
 d3.csv("../data/data.csv", function(error, graph) { // add data
   var nodesByName = {};
@@ -85,7 +90,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
   
   nodeGraph = d3.values(nodesByName);
   
-  var scale = d3.scale.pow().exponent(2)
+  var scale = d3.scale.linear()
       .domain([-1, 1])
       .range([-5, 5]);
  
@@ -180,20 +185,15 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d.expr = _.result(_.find(normalGene, function (g) {
               return g.gene === d.name;
             }), 'average');
+            d.tumorExpr = _.result(_.find(tumorGene, function (g) {
+              return g.gene === d.name;
+            }), 'average');
             return exprScale(d.expr); 
           })
         )
         .on("mouseover", function(d) { 
           highlight(d, true);
-          d.tumorExpr = _.result(_.find(tumorGene, function (g) {
-            return g.gene === d.name;
-          }), 'average');
           var curNode = d3.select("#" + d.name);
-          curNode.append("title").text(function (d) {
-            return "mRNA:\t" + d.name 
-                + "\nN_Expr:\t" + d.expr 
-                + "\nT_Expr:\t" + d.tumorExpr;
-          });
           curNode.transition()
             .duration(500)
             .attr("d", d3.svg.symbol().type("square").size(exprScale(d.tumorExpr)));
@@ -204,6 +204,11 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             .transition()
             .duration(500)
             .attr("d", d3.svg.symbol().type("square").size(exprScale(d.expr)));
+        })
+        .append("title").text(function (d) {
+          return "mRNA:\t" + d.name 
+              + "\nN_Expr:\t" + d.expr 
+              + "\nT_Expr:\t" + d.tumorExpr;
         });
     });
   });
@@ -220,20 +225,15 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d.expr = _.result(_.find(normalMirna, function (g) {
               return g.mirna === d.name;
             }), 'average');
+            d.tumorExpr = _.result(_.find(tumorMirna, function (g) {
+              return g.mirna === d.name;
+            }), 'average');
             return exprScale(d.expr); 
           })
         )
         .on("mouseover", function(d) { 
           highlight(d, true);
-          d.tumorExpr = _.result(_.find(tumorMirna, function (g) {
-            return g.mirna === d.name;
-          }), 'average');
           var curNode = d3.select("#" + d.name);
-          curNode.append("title").text(function (d) {
-            return "miRNA:\t" + d.name 
-                + "\nN_Expr:\t" + d.expr 
-                + "\nT_Expr:\t" + d.tumorExpr;
-          });
           curNode.transition()
             .duration(500)
             .attr("d", d3.svg.symbol().type("circle").size(exprScale(d.tumorExpr)));
@@ -244,6 +244,11 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             .transition()
             .duration(500)
             .attr("d", d3.svg.symbol().type("circle").size(exprScale(d.expr)));
+        })
+        .append("title").text(function (d) {
+          return "miRNA:\t" + d.name 
+              + "\nN_Expr:\t" + d.expr 
+              + "\nT_Expr:\t" + d.tumorExpr;
         });
     });
   });
@@ -386,6 +391,144 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
       return d.type === type;
     }).classed("others", false);
   };
+  
+  corrFilter = function (val) {
+    resetGraph();
+    fadeGraph();
+    
+    var min;
+    var max;
+    if (val === 0) {
+      max = 1;
+      min = 0.8;
+    } else if (val === 1) {
+      max = 0.8;
+      min = 0.5;
+    } else {
+      max = 0.5;
+      min = 0;
+    }
+    
+    normalLinks.filter(function (d, i) {
+      d.N_CC = Math.abs(d.N_CC);
+      return min < d.N_CC && d.N_CC <= max;
+    }).each(function (d) {
+      d3.select("#" + d.mRNA).classed("others", false);
+      d3.select("#" + d.microRNA).classed("others", false);
+    })
+    .classed("others", false);
+    
+    tumorLinks.filter(function (d, i) {
+      d.T_CC = Math.abs(d.T_CC);
+      return min < d.T_CC && d.T_CC <= max;
+    }).each(function (d) {
+      d3.select("#" + d.mRNA).classed("others", false);
+      d3.select("#" + d.microRNA).classed("others", false);
+    })
+    .classed("others", false);
+  };
+  
+  weightFilter = function (val) {
+    resetGraph();
+    fadeGraph();
+    
+    var max = Number.MAX_VALUE;
+    var min;
+    if (val === 0) {
+      min = 10;
+    } else if (val === 1) {
+      max = 10;
+      min = 5;
+    } else {
+      max = 5;
+      min = 0;
+    }
+    
+    node.filter(function (d) {
+      return min < d.weight && d.weight <= max;
+    }).each(function (d) {
+      
+    })
+    .classed("others", false);
+    
+  };
+  
+  exprFilter = function (val) {
+    resetGraph();
+    fadeGraph();
+    
+    node.filter(function (d) {
+      console.log("tumor" + d.tumorExpr);
+      console.log("expr" + d.expr);
+      return val === 0 ? (d.tumorExpr > d.expr) : (d.tumorExpr < d.expr);
+    }).classed("others", false);
+  };
+  
+  linkTypeFilter = function (val) {
+    resetGraph();
+    fadeGraph();
+    
+    if (val) {
+      tumorLinks
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+    } else {
+      normalLinks
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+    }
+  };
+  
+  posCorrFilter = function (val) {
+    resetGraph();
+    fadeGraph();
+    
+    if (val) {
+      normalLinks
+          .filter(function (d) {
+            return d.N_CC < 0;
+          })
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+      tumorLinks
+          .filter(function (d) {
+            return d.T_CC < 0;
+          })
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+    } else {
+      normalLinks
+          .filter(function (d) {
+            return d.N_CC > 0;
+          })
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+      tumorLinks
+          .filter(function (d) {
+            return d.T_CC > 0;
+          })
+          .each(function (d) {
+            d3.select("#" + d.mRNA).classed("others", false);
+            d3.select("#" + d.microRNA).classed("others", false);
+          })
+          .classed("others", false);
+    }
+  };
 });
 
 function highlightBySearch() {
@@ -398,7 +541,7 @@ function highlightBySearch() {
   }
   // get node
   var curNode = force.nodes().filter(function (d) {
-    return d.name === name;
+    return d.name.toUpperCase() === name.toUpperCase();
   });
   // node not found in graph
   if (curNode.length === 0) {
@@ -484,8 +627,6 @@ function buildScale(expr, tumorExpr, type) {
         return g.average;
       }).average
   );
-  console.log(max);
-  console.log(min);
   return type === TYPE_MIRNA ? 
       d3.scale.log()
       .clamp(true)
