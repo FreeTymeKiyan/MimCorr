@@ -410,8 +410,8 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     }
     
     normalLinks.filter(function (d, i) {
-      d.N_CC = Math.abs(d.N_CC);
-      return min < d.N_CC && d.N_CC <= max;
+      var normalCorr = Math.abs(d.N_CC);
+      return min < normalCorr && normalCorr <= max;
     }).each(function (d) {
       d3.select("#" + d.mRNA).classed("others", false);
       d3.select("#" + d.microRNA).classed("others", false);
@@ -419,8 +419,8 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     .classed("others", false);
     
     tumorLinks.filter(function (d, i) {
-      d.T_CC = Math.abs(d.T_CC);
-      return min < d.T_CC && d.T_CC <= max;
+      var tumorCorr = Math.abs(d.T_CC);
+      return min < tumorCorr && tumorCorr <= max;
     }).each(function (d) {
       d3.select("#" + d.mRNA).classed("others", false);
       d3.select("#" + d.microRNA).classed("others", false);
@@ -446,8 +446,6 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     
     node.filter(function (d) {
       return min < d.weight && d.weight <= max;
-    }).each(function (d) {
-      
     })
     .classed("others", false);
     
@@ -458,8 +456,6 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     fadeGraph();
     
     node.filter(function (d) {
-      console.log("tumor" + d.tumorExpr);
-      console.log("expr" + d.expr);
       return val === 0 ? (d.tumorExpr > d.expr) : (d.tumorExpr < d.expr);
     }).classed("others", false);
   };
