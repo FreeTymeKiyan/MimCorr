@@ -99,7 +99,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
   var normalLinks = normal.enter().append("line")// draw link
       .attr("class", "normalLink")
       .style("stroke", grey)
-      .style("stroke-width", function(d) { return Math.abs(scale(d.N_CC));  })
+      .style("stroke-width", function(d) { return Math.abs(scale(d.N_CC)); })
       .style("stroke-dasharray", function (d) { // set dashed-line
         var dbNum = 0;
         if (d.Targetprofiler === "targetprofiler-Yes") dbNum += 1;
@@ -581,7 +581,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     }
   };
   
-  generateList(node);
+  generateList(nodeGraph);
 });
 
 function highlightBySearch() {
@@ -694,16 +694,12 @@ function buildScale(expr, tumorExpr, type) {
       .range([75, 375]);
 }
 
-function generateList(node) {
-  node.filter(function (d) {
-    return d.type === TYPE_MRNA;
-  }).each(function (d) {
+function generateList(nodeGraph) {
+  _.each(_.sortBy(_.filter(nodeGraph, { "type" : TYPE_MRNA }), "name"), function (d) {
     $("#mrna_list").append("<li>" + d.name + "</li>");
   });
   
-  node.filter(function (d) {
-    return d.type === TYPE_MIRNA;
-  }).each(function (d) {
+  _.each(_.sortBy(_.filter(nodeGraph, { "type" : TYPE_MIRNA }), "name"), function (d) {
     $("#mirna_list").append("<li>" + d.name + "</li>");
   });
 }
