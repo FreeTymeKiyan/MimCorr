@@ -7,6 +7,11 @@ a {
   color: #00B7FF;
 }
 
+a.legend {
+  margin-left: 10px;
+  color: #333;
+}
+
 .node {
   stroke: #fff;
   stroke-width: 1.5px;
@@ -56,7 +61,7 @@ body.graph {
 }
 
 div.menu-bottom {
-  padding-bottom: 10px;
+  padding-bottom: 40px;
 }
 
 div.menu-left {
@@ -74,13 +79,13 @@ div.well {
   background-color:#fff;
 }
 
-ul {
+ul.legend {
   display: table-cell;
   list-style-type: none;
   padding-left: 0px;
 }
 
-li {
+li.class {
   line-height: 25px;
   padding: 0px;
 }
@@ -92,4 +97,91 @@ svg.legend {
 
 #search-bar {
   padding-left: 10px;
+}
+
+div.document {
+  background-color: #17427B;
+}
+
+h1 {
+  padding-top: 20px;
+  margin-top: 0;
+  color: #fff;
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 30px;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 24px;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h2 small {
+  color: #fff;
+}
+
+h3 small {
+  color: #fff;
+}
+
+p {
+  color: #fff;
+  margin: 0 0 10px;
+}
+
+ul.indoc {
+  color: #fff;
+}
+
+#mrna_list {
+  list-style-type: none;
+  columns: 8;
+  -webkit-columns: 8;
+  -moz-columns: 8;
+  list-style-position: inside;
+}
+
+#mirna_list {
+  list-style-type: none;
+  list-style-position: inside;
+  columns: 4;
+  -webkit-columns: 4;
+  -moz-columns: 4;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+footer {
+  background-color: #17427B;
+}
+
+button.back-to-top {
+  background: none;
+  margin: 0px 30px 30px 0px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  display: none;
+  text-decoration: none;
+  color: #ffffff;
 }
