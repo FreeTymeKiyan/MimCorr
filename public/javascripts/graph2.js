@@ -4,8 +4,8 @@ const KEYCODE_C = 67;
 
 // var width = 960,
 //     height = 500;
-var width = window.innerWidth,
-    height = window.innerHeight;
+var width = window.innerWidth - 15,
+    height = window.innerHeight - 40;
     
 var xScale = d3.scale.linear()
     .domain([0, width]).range([0, width]);
@@ -51,6 +51,7 @@ var force = d3.layout.force() // position linked nodes, physical simulation
     .linkDistance(30) // set the link distance
     .charge(-40) // negative push, positive pull
     .chargeDistance(height - 200)
+    .alpha(10)
     .size([width, height]);
 
 var svg = d3.select("body")
@@ -525,6 +526,8 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
           .classed("others", false);
     }
   };
+  
+  generateList(node);
 });
 
 function highlightBySearch() {
@@ -633,4 +636,18 @@ function buildScale(expr, tumorExpr, type) {
       .clamp(true)
       .domain([min, max])
       .range([75, 375]);
+}
+
+function generateList(node) {
+  node.filter(function (d) {
+    return d.type === TYPE_MRNA;
+  }).each(function (d) {
+    $("#mrna_list").append("<li>" + d.name + "</li>");
+  });
+  
+  node.filter(function (d) {
+    return d.type === TYPE_MIRNA;
+  }).each(function (d) {
+    $("#mirna_list").append("<li>" + d.name + "</li>");
+  });
 }
