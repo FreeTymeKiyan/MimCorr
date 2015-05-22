@@ -147,7 +147,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
       .attr("text-anchor", "middle") 
       .text(function (d) {
         return d.T_CC >= 0 ? "+" : "-";
-  });
+      });
 
   var node = vis.selectAll(".node") // draw node
       .data(nodeGraph)
@@ -322,6 +322,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     d3.selectAll("line.normalLink").classed("others", isActive);
     d3.selectAll("line.tumorLink").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
+    d3.selectAll("text").classed("others", isActive);
     // highlight center node
     d3.select("#" + data.name).classed("main", isActive);
     if (isActive) {
@@ -332,8 +333,14 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
           return d.mRNA === data.name;
         });
         connLinks.classed("others", !isActive);
+        normalSymbol.filter(function (d) {
+          return d.mRNA === data.name;
+        }).classed("others", !isActive);
       
         tumorLinks.filter(function (d, i) {
+          return d.mRNA === data.name;
+        }).classed("others", !isActive);
+        tumorSymbol.filter(function (d) {
           return d.mRNA === data.name;
         }).classed("others", !isActive);
       
@@ -345,8 +352,14 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
           return d.microRNA === data.name;
         });
         connLinks.classed("others", !isActive);
+        normalSymbol.filter(function (d) {
+          return d.microRNA === data.name;
+        }).classed("others", !isActive);
       
         tumorLinks.filter(function (d, i) {
+          return d.microRNA === data.name;
+        }).classed("others", !isActive);
+        tumorSymbol.filter(function (d) {
           return d.microRNA === data.name;
         }).classed("others", !isActive);
       
@@ -361,10 +374,20 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     d3.selectAll("line.normalLink").classed("others", isActive);
     d3.selectAll("line.tumorLink").classed("others", isActive);
     d3.selectAll("path").classed("others", isActive);
+    d3.selectAll("text").classed("others", isActive);
     if (isActive) {
       d3.select(link).classed("others", !isActive);
       d3.select("#" + data.mRNA).classed("others", !isActive);
       d3.select("#" + data.microRNA).classed("others", !isActive);
+      if (d3.select(link).attr("class") === "normalLink") {
+        normalSymbol.filter(function (d) {
+          return data.mRNA === d.mRNA && data.microRNA === d.microRNA;
+        }).classed("others", !isActive);
+      } else {
+        tumorSymbol.filter(function (d) {
+          return data.mRNA === d.mRNA && data.microRNA === d.microRNA;
+        }).classed("others", !isActive);
+      }
     }
   }
   
@@ -380,6 +403,13 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     })
     .classed("others", false);
     tumorLinks.filter(function (d, i) {
+      return d.type === id;
+    }).classed("others", false);
+    
+    normalSymbol.filter(function (d) {
+      return d.type === id;
+    }).classed("others", false);
+    tumorSymbol.filter(function (d) {
       return d.type === id;
     }).classed("others", false);
   };
@@ -427,6 +457,15 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
       d3.select("#" + d.microRNA).classed("others", false);
     })
     .classed("others", false);
+    
+    normalSymbol.filter(function (d) {
+      var normalCorr = Math.abs(d.N_CC);
+      return min < normalCorr && normalCorr <= max;
+    }).classed("others", false);
+    tumorSymbol.filter(function (d) {
+      var tumorCorr = Math.abs(d.T_CC);
+      return min < tumorCorr && tumorCorr <= max;
+    }).classed("others", false);
   };
   
   weightFilter = function (val) {
@@ -466,6 +505,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
     fadeGraph();
     
     if (val) {
+      tumorSymbol.classed("others", false);
       tumorLinks
           .each(function (d) {
             d3.select("#" + d.mRNA).classed("others", false);
@@ -473,6 +513,7 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
           })
           .classed("others", false);
     } else {
+      normalSymbol.classed("others", false);
       normalLinks
           .each(function (d) {
             d3.select("#" + d.mRNA).classed("others", false);
@@ -496,6 +537,9 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d3.select("#" + d.microRNA).classed("others", false);
           })
           .classed("others", false);
+      normalSymbol.filter(function (d) {
+        return d.N_CC < 0;
+      }).classed("others", false);
       tumorLinks
           .filter(function (d) {
             return d.T_CC < 0;
@@ -505,6 +549,9 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d3.select("#" + d.microRNA).classed("others", false);
           })
           .classed("others", false);
+      tumorSymbol.filter(function (d) {
+        return d.T_CC < 0;;
+      }).classed("others", false);
     } else {
       normalLinks
           .filter(function (d) {
@@ -515,6 +562,10 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d3.select("#" + d.microRNA).classed("others", false);
           })
           .classed("others", false);
+      normalSymbol.filter(function (d) {
+        return d.N_CC > 0;
+      }).classed("others", false);
+      
       tumorLinks
           .filter(function (d) {
             return d.T_CC > 0;
@@ -524,6 +575,9 @@ d3.csv("../data/data.csv", function(error, graph) { // add data
             d3.select("#" + d.microRNA).classed("others", false);
           })
           .classed("others", false);
+      tumorSymbol.filter(function (d) {
+        return d.T_CC > 0;;
+      }).classed("others", false);
     }
   };
   
@@ -555,12 +609,14 @@ function resetGraph() {
   d3.selectAll("line.tumorLink").classed("others", false);
   d3.selectAll("path").classed("others", false);
   d3.selectAll("path").classed("main", false);
+  d3.selectAll("text").classed("others", false);
 }
 
 function fadeGraph() {
   d3.selectAll("line.normalLink").classed("others", true);
   d3.selectAll("line.tumorLink").classed("others", true);
   d3.selectAll("path").classed("others", true);
+  d3.selectAll("text").classed("others", true);
 }
 
 function centerOnNode(d) {

@@ -46,6 +46,10 @@ line.others{
   stroke: #3C3C3C !important;
 }
 
+text.others {
+  opacity: .1 !important;
+}
+
 iframe {
   width: 960px;
   height: 500px;
