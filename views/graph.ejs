@@ -10,7 +10,7 @@
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/scroll.js"></script>
   </head>
-  
+
   <div class="well">
     <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#legend" aria-expanded="false" aria-controls="legend">
       <span class="glyphicon glyphicon-list"></span>
@@ -75,7 +75,7 @@
       </ul>
     </div>
   </div>
-  
+
   <body class="graph">
     <script type="text/javascript" src="javascripts/graph2.js"></script>
     <div class="navbar-bottom menu-bottom">
@@ -87,7 +87,7 @@
           <!-- dropdown filter link type -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              Link<span class="caret"></span>
+              Database<span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
               <li onclick="highlightLinkType(this.value)" value="1"><a>1</a></li>
@@ -105,7 +105,7 @@
               <li onclick="highlightNodeType(this.value)" value="1"><a>microRNA</a></li>
             </ul>
           </div>
-  				<!-- dropdown filter correlation -->
+          <!-- dropdown filter correlation -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               Correlation<span class="caret"></span>
@@ -116,7 +116,7 @@
               <li onclick="corrFilter(this.value)" value="2"><a>0 ~ 0.5</a></li>
             </ul>
           </div>
-  				<!-- dropdown filter weight -->
+          <!-- dropdown filter weight -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               Weight<span class="caret"></span>
@@ -127,7 +127,7 @@
               <li onclick="weightFilter(this.value)" value="2"><a>1 ~ 5</a></li>
             </ul>
           </div>
-  				<!-- dropdown filter expression -->
+          <!-- dropdown filter expression -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               Expression<span class="caret"></span>
@@ -137,7 +137,7 @@
               <li onclick="exprFilter(this.value)" value="1"><a>Down-regulating</a></li>
             </ul>
           </div>
-  				<!-- dropdown filter link type -->
+          <!-- dropdown filter link type -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               Link Type<span class="caret"></span>
@@ -147,7 +147,7 @@
               <li onclick="linkTypeFilter(this.value)" value="1"><a>Tumor</a></li>
             </ul>
           </div>
-  				<!-- dropdown filter correlation polarity -->
+          <!-- dropdown filter correlation polarity -->
           <div class="btn-group dropup" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               +/-<span class="caret"></span>
@@ -170,49 +170,53 @@
     <div class="document" id="doc">
       <div class="container">
         <h1>MMiRNA-Viewer</h1>
-        <p class="lead">A Data Visulization Tool Built to Render the Correlation Between MicroRNA and MRNA</p>
+        <p class="lead">A Data Visulization Tool Built to Render the Correlation Between MmicroRNA and mRNA</p>
         <h2>About</h2>
-        <p>MMiRNA-Viewer renders the result of <a href="/mmirna-tar">MMiRNA-Tar</a> into a visual graph. </p>
+        <p>MMiRNA-Viewer renders the result of <a href="/mmirna-tar">MMiRNA-Tar</a> into a visual graph. The graph consists of two types of nodes: microRNA and mRNA and two types of links: normal link and tumor link. The node size is related to the expression. The higher expression, the larger the node. The link width is related to the correlation. The larger abstract correlation, the wider the link. Each link has a plus/minus sign on it that shows whether the correlation is positive/negative.</p>
         <h2>Data</h2>
         <p>
           <ul class="indoc">
-            <li>mRNA Normal/Tumor expression</li>
-            <li>microRNA Normal/Tumor expression</li>
+            <li>mRNA normal/tumor expression</li>
+            <li>microRNA normal/tumor expression</li>
             <li>Correlation between mRNA and microRNA</li>
             <li>Number of Databases that validated the connection</li>
             <li>Normal/Tumor correlation</li>
           </ul>
         </p>
-      
+
         <h2>Functions</h2>
         <h3>Legend</h3>
-        <p>There is a graph legend on the top-left corner. When the button is clicked, it toggles the state of the legend. </p>
+        <p>The legend of this graph is on the top-left corner. When the button is clicked, it collapses/shows state of the legend. A link to documentation is also available on the right to the button.</p>
         <h3>Highlight</h3>
-        <p>The node will be highlighted when the cursor moves onto it. The link and its connected nodes will be highlighted when the cursor moves onto it. Other parts of the graph will become transparent during the highlight. </p>
+        <p>The node will be highlighted when the cursor moves onto it. The link and its connected nodes will be highlighted when the cursor moves onto it. Other parts of the graph will become transparent during highlight.</p>
+        <h3>Fixing Position</h3>
+        <p>Click a node to fix its position. Double-click to make it move again. </p>
         <h3>Zoom In/Out</h3>
         <p>Move the cursor onto a node or a link and scroll to zoom the graph.</p>
         <h3>Panning</h3>
-        <p>Click a link and move to move the whole graph.</p>
+        <p>Drag a link or a symbol to move the whole graph.</p>
         <h3>Dragging</h3>
-        <p>A node can be dragged to any position. Its position will be fixed. By double clicking the node can make it move again.</p>
+        <p>A node can be dragged to any position. Its position will be fixed. Double clicking the node can make it move again.</p>
         <h3>Details</h3>
         <p>Hover the cursor on a node or link to show the detail data, such as the node's name, its normal and tumor expressions, or a link's correlation value.</p>
         <h3>Centering</h3>
-        <p>The graph will be centered by clicking the first button on the left in the bottom menu bar. Or you can click "C" on the keyboard to achieve same effect. </p>
+        <p>The graph will be centered by clicking the first button on the left in the bottom menu bar. Clicking "C" on the keyboard achieves the same effect. </p>
         <h3>Animation</h3>
         <p>The size of a node represents its normal expression. It changes when the cursor is hovering to show the tumor expression.</p>
         <h3>Filters <small>(from left to right)</small></h3>
         <ul class="indoc">
-          <li>Database number filter.</li>
-          <li>Node Type filter.</li>
-          <li>Correlation Range filter. </li>
-          <li>Weight filter.</li>
-          <li>Expression filter. </li>
-          <li>Link type filter.</li>
-          <li>Correlation value filter.</li>
-          <li>Search bar filter.</li>
+          <li>Database number filter. Shows different types of links by choosing the number of databases that have validated the correlation. More databases means better validated correlation. </li>
+          <li>Node Type filter. Shows microRNA/mRNA only. </li>
+          <li>Correlation Range filter. Shows the links that has abstract correlation value in specific range chosen. The closer abstract correlations to 1, the stronger the relation between the two nodes. </li>
+          <li>Weight filter. Shows the nodes that has the number of links in the specific range. The higher weight, the more significant the node is. </li>
+          <li>Expression filter. Shows how the expression changes from normal to tumor situation. Up-regulating means the tumor expression increases. Down-regulating means the tumor expression decreases. </li>
+          <li>Link type filter. Shows normal/tumor links only. </li>
+          <li>Correlation value filter. Shows positive/negative correlation only. </li>
+          <li>Search bar filter. Searches a specific node by its id. Two lists are provided in tutorial. You may copy a name, click the bottom-left back-to-top button to paste it in the text field, then click search button to center on the node. It is not case-sensitive. </li>
         </ul>
-        <h2>Appendix: Lists of microRNA and mRNA<small>(copy and search)</small></h2>
+        <h2>Note</h2>
+        <p>Due to the large number of elements shown in the graph, the browser may be slow when the graph is not stable. You may want to wait until the graph is fully rendered. </p>
+        <h2>Appendix: Lists of microRNA and mRNA <small>(copy and search)</small></h2>
         <div>
           <h3>microRNA List</h3>
           <ul class="indoc list" id="mirna_list"></ul>
@@ -228,9 +232,9 @@
       </div>
     </div>
   </body>
-  
+
   <footer>
     <% include ./partials/footer %>
   </footer>
-  
+
 </html>

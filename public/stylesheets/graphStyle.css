@@ -147,11 +147,12 @@ h3 small {
 
 p {
   color: #fff;
-  margin: 0 0 10px;
+  line-height: 1.5;
 }
 
 ul.indoc {
   color: #fff;
+  line-height: 1.5;
 }
 
 #mrna_list {
@@ -160,6 +161,8 @@ ul.indoc {
   -webkit-columns: 8;
   -moz-columns: 8;
   list-style-position: inside;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 #mirna_list {
@@ -168,6 +171,8 @@ ul.indoc {
   columns: 4;
   -webkit-columns: 4;
   -moz-columns: 4;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 .navbar {
