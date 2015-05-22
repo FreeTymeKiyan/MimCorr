@@ -8,63 +8,65 @@
     <script src="javascripts/lodash.min.js"></script>
     <script src="javascripts/jquery-1.11.2.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/scroll.js"></script>
   </head>
   
   <div class="well">
     <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#legend" aria-expanded="false" aria-controls="legend">
       <span class="glyphicon glyphicon-list"></span>
     </button>
+    <a class="legend" href="/graph#doc">Tutorial</a>
     <div class="collapse" id="legend">
-      <ul>
-        <li>
+      <ul class="legend">
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <circle cx="10" cy="10" r="10" stroke="white" stroke-width="1.5" fill="darkorange"/>
           </svg>
             microRNA
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" width="60" height="20">
             <rect y="0" width="20" height="20" stroke="white" stroke-width="1.5" fill="blue"/>
           </svg>
           mRNA
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <line x1="0" y1="10" x2="50" y2="10" stroke="darkgreen" stroke-width="3" />
           </svg>
           normal
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <line x1="0" y1="10" x2="50" y2="10" stroke="red" stroke-width="3" />
           </svg>
           tumor
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <line x1="0" y1="10" x2="50" y2="10" stroke="green" stroke-width="3" stroke-dasharray="2px 2px"/>
           </svg>
           1 database
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <line x1="0" y1="10" x2="50" y2="10" stroke="green" stroke-width="3" stroke-dasharray="8px 2px"/>
           </svg>
           2 databases
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <line x1="0" y1="10" x2="50" y2="10" stroke="green" stroke-width="3" />
           </svg>
           3 databases
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <text x="0" y="0" dy=".70em" font-size="23">+</text>
           </svg>
           positive
         </li>
-        <li>
+        <li class="legend">
           <svg class="legend" height="20" width="60">
             <text x="0" y="0" dy=".70em" font-size="23">-</text>
           </svg>
@@ -74,98 +76,163 @@
     </div>
   </div>
   
+
+  
   <body class="graph">
     <script type="text/javascript" src="javascripts/graph2.js"></script>
-  </body>
-  
-  <div class="navbar-fixed-bottom menu-bottom">
-    <div class="container col-sm-9 col-sm-offset-1">
-      <div class="btn-group" role="group" data-toggle="tooltip" data-placement="top" data-original-title="Center molecules (Key: C)" data-delay="{show:800, hide:50}">
-        <button data-bind="click: centerMolecules" class="btn btn-default" onclick="centerView()">
-          <span class="glyphicon glyphicon-screenshot"></span>
-        </button>
-        <!-- dropdown filter link type -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Link<span class="caret"></span>
+    <div class="navbar-bottom menu-bottom">
+      <div class="container col-sm-9 col-sm-offset-1">
+        <div class="btn-group" role="group" data-toggle="tooltip" data-placement="top" data-original-title="Center molecules (Key: C)" data-delay="{show:800, hide:50}">
+          <button data-bind="click: centerMolecules" class="btn btn-default" onclick="centerView()">
+            <span class="glyphicon glyphicon-screenshot"></span>
           </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="highlightLinkType(this.value)" value="1"><a>1</a></li>
-            <li onclick="highlightLinkType(this.value)" value="2"><a>2</a></li>
-            <li onclick="highlightLinkType(this.value)" value="3"><a>3</a></li>
-          </ul>
-        </div>
-        <!-- dropdown filter node type -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Node<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="highlightNodeType(this.value)" value="0"><a>mRNA</a></li>
-            <li onclick="highlightNodeType(this.value)" value="1"><a>microRNA</a></li>
-          </ul>
-        </div>
-				<!-- dropdown filter correlation -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Correlation<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="corrFilter(this.value)" value="0"><a>0.8 ~ 1</a></li>
-            <li onclick="corrFilter(this.value)" value="1"><a>0.5 ~ 0.8</a></li>
-            <li onclick="corrFilter(this.value)" value="2"><a>0 ~ 0.5</a></li>
-          </ul>
-        </div>
-				<!-- dropdown filter weight -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Weight<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="weightFilter(this.value)" value="0"><a>>10</a></li>
-            <li onclick="weightFilter(this.value)" value="1"><a>5 ~ 10</a></li>
-            <li onclick="weightFilter(this.value)" value="2"><a>1 ~ 5</a></li>
-          </ul>
-        </div>
-				<!-- dropdown filter expression -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Expression<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="exprFilter(this.value)" value="0"><a>Increasing</a></li>
-            <li onclick="exprFilter(this.value)" value="1"><a>Decreasing</a></li>
-          </ul>
-        </div>
-				<!-- dropdown filter link type -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Link Type<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="linkTypeFilter(this.value)" value="0"><a>Normal</a></li>
-            <li onclick="linkTypeFilter(this.value)" value="1"><a>Tumor</a></li>
-          </ul>
-        </div>
-				<!-- dropdown filter correlation polarity -->
-        <div class="btn-group dropup" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            +/-<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li onclick="posCorrFilter(this.value)" value="0"><a>Positive Correlation</a></li>
-            <li onclick="posCorrFilter(this.value)" value="1"><a>Negative Correlation</a></li>
-          </ul>
-        </div>
-        <!-- search bar -->
-        <div class="input-group" id="search-bar">
-          <input id="name" type="text" class="form-control" placeholder="Search for...">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" onclick="highlightBySearch()">Search</button>
-          </span>
+          <!-- dropdown filter link type -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Link<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="highlightLinkType(this.value)" value="1"><a>1</a></li>
+              <li onclick="highlightLinkType(this.value)" value="2"><a>2</a></li>
+              <li onclick="highlightLinkType(this.value)" value="3"><a>3</a></li>
+            </ul>
+          </div>
+          <!-- dropdown filter node type -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Node<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="highlightNodeType(this.value)" value="0"><a>mRNA</a></li>
+              <li onclick="highlightNodeType(this.value)" value="1"><a>microRNA</a></li>
+            </ul>
+          </div>
+  				<!-- dropdown filter correlation -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Correlation<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="corrFilter(this.value)" value="0"><a>0.8 ~ 1</a></li>
+              <li onclick="corrFilter(this.value)" value="1"><a>0.5 ~ 0.8</a></li>
+              <li onclick="corrFilter(this.value)" value="2"><a>0 ~ 0.5</a></li>
+            </ul>
+          </div>
+  				<!-- dropdown filter weight -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Weight<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="weightFilter(this.value)" value="0"><a>>10</a></li>
+              <li onclick="weightFilter(this.value)" value="1"><a>5 ~ 10</a></li>
+              <li onclick="weightFilter(this.value)" value="2"><a>1 ~ 5</a></li>
+            </ul>
+          </div>
+  				<!-- dropdown filter expression -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Expression<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="exprFilter(this.value)" value="0"><a>Increasing</a></li>
+              <li onclick="exprFilter(this.value)" value="1"><a>Decreasing</a></li>
+            </ul>
+          </div>
+  				<!-- dropdown filter link type -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Link Type<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="linkTypeFilter(this.value)" value="0"><a>Normal</a></li>
+              <li onclick="linkTypeFilter(this.value)" value="1"><a>Tumor</a></li>
+            </ul>
+          </div>
+  				<!-- dropdown filter correlation polarity -->
+          <div class="btn-group dropup" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              +/-<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li onclick="posCorrFilter(this.value)" value="0"><a>Positive Correlation</a></li>
+              <li onclick="posCorrFilter(this.value)" value="1"><a>Negative Correlation</a></li>
+            </ul>
+          </div>
+          <!-- search bar -->
+          <div class="input-group" id="search-bar">
+            <input id="name" type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="highlightBySearch()">Search</button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="document" id="doc">
+      <div class="container">
+        <h1>MMiRNA-Viewer</h1>
+        <p class="lead">A Data Visulization Tool Built to Render the Correlation Between MicroRNA and MRNA</p>
+        <h2>About</h2>
+        <p>MMiRNA-Viewer renders the result of <a href="/mmirna-tar">MMiRNA-Tar</a> into a visual graph. </p>
+        <h2>Data</h2>
+        <p>
+          <ul class="indoc">
+            <li>mRNA Normal/Tumor expression</li>
+            <li>microRNA Normal/Tumor expression</li>
+            <li>Correlation between mRNA and microRNA</li>
+            <li>Number of Databases that validated the connection</li>
+            <li>Normal/Tumor correlation</li>
+          </ul>
+        </p>
+      
+        <h2>Functions</h2>
+        <h3>Legend</h3>
+        <p>There is a graph legend on the top-left corner. When the button is clicked, it toggles the state of the legend. </p>
+        <h3>Highlight</h3>
+        <p>The node will be highlighted when the cursor moves onto it. The link and its connected nodes will be highlighted when the cursor moves onto it. Other parts of the graph will become transparent during the highlight. </p>
+        <h3>Zoom In/Out</h3>
+        <p>Move the cursor onto a node or a link and scroll to zoom the graph.</p>
+        <h3>Panning</h3>
+        <p>Click a link and move to move the whole graph.</p>
+        <h3>Dragging</h3>
+        <p>A node can be dragged to any position. Its position will be fixed. By double clicking the node can make it move again.</p>
+        <h3>Details</h3>
+        <p>Hover the cursor on a node or link to show the detail data, such as the node's name, its normal and tumor expressions, or a link's correlation value.</p>
+        <h3>Centering</h3>
+        <p>The graph will be centered by clicking the first button on the left in the bottom menu bar. Or you can click "C" on the keyboard to achieve same effect. </p>
+        <h3>Animation</h3>
+        <p>The size of a node represents its normal expression. It changes when the cursor is hovering to show the tumor expression.</p>
+        <h3>Filters <small>(from left to right)</small></h3>
+        <ul class="indoc">
+          <li>Database number filter.</li>
+          <li>Node Type filter.</li>
+          <li>Correlation Range filter. </li>
+          <li>Weight filter.</li>
+          <li>Expression filter. </li>
+          <li>Link type filter.</li>
+          <li>Correlation value filter.</li>
+          <li>Search bar filter.</li>
+        </ul>
+        <h2>Appendix: Lists of microRNA and mRNA<small>(copy and search)</small></h2>
+        <div>
+          <h3>microRNA List</h3>
+          <ul class="indoc list" id="mirna_list"></ul>
+        </div>
+        <div>
+          <h3>mRNA List</h3>
+          <ul class="indoc list" id="mrna_list"></ul>
+        </div>
+
+        <button class="btn btn-default back-to-top" type="button" title="Back to top">
+          <span class="glyphicon glyphicon-chevron-up"></span>
+        </button>
+      </div>
+    </div>
+  </body>
+  
+  <footer>
+    <% include ./partials/footer %>
+  </footer>
   
 </html>
